@@ -1,0 +1,10 @@
+yes_pool_flag says what needs to happen before it is obtainable
+yes_pool_flag = 'cavendish_extinct'
+no_pool_flag is the opposite
+like when gros michel is extinct it can no longer appear
+
+C: text colour
+X: background colour
+s: text size
+V: custom text colour using loc_vars
+E: DynaText (floaty text)

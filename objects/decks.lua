@@ -1,0 +1,21 @@
+SMODS.Back{
+    name = "Joker Testing Deck",
+    key = "j_test",
+    pos = { x = 0, y = 0 },
+    config = { jokers = { "j_rj_one", "j_rj_two", "j_rj_four", "j_rj_six", "j_rj_x" }, consumables = { "c_aura", "c_aura", "c_strength", "c_chariot", "c_sigil" } },
+    apply = function(self, back)
+        --[[G.E_MANAGER:add_event(Event({
+            func = function()
+                for k, v in pairs(G.playing_cards) do
+                    if v.base.suit == "Hearts" or v.base.suit == "Diamonds" then
+                        v:change_suit('Spades')
+                    end
+                end
+                return true
+            end
+        }))]]
+    end,
+    loc_vars = function(self, info_queue, back)
+        return { vars = self.config.jokers }
+    end
+}
