@@ -19,3 +19,15 @@ SMODS.Back{
         return { vars = self.config.jokers }
     end
 }
+
+SMODS.Back{
+    name = "Joker Testing Deck 2",
+    key = "j_test_2",
+    pos = { x = 0, y = 0 },
+    config = { jokers = { "j_rj_chipped_tooth", "j_rj_annoying_fly", "j_rj_garbage_dealer" } },
+    apply = function(self, back)
+    end,
+    loc_vars = function(self, info_queue, back)
+        return { vars = self.config.jokers }
+    end
+}

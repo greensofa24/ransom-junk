@@ -36,6 +36,27 @@ SMODS.Atlas({
     py = 95
 })
 
+SMODS.Atlas({
+    key = "chipped_tooth",
+    path = "j_chipped_tooth.png",
+    px = 213,
+    py = 285
+})
+
+SMODS.Atlas({
+    key = "annoying_fly",
+    path = "j_annoying_fly.png",
+    px = 213,
+    py = 285
+})
+
+SMODS.Atlas({
+    key = "garbage_dealer",
+    path = "j_garbage_dealer.png",
+    px = 213,
+    py = 285
+})
+
 SMODS.Joker{
 	key = "one",
     config = { extra = {} },
@@ -274,5 +295,95 @@ SMODS.Joker{
 
     loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.min_x_mult, card.ability.extra.max_x_mult, card.ability.extra.max_triggers } }
+	end
+}
+
+SMODS.Joker{
+	key = "chipped_tooth",
+    config = { extra = { chips = 1 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = "rj_junk",
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "chipped_tooth",
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                chips = card.ability.extra.chips
+            }
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.chips } }
+	end
+}
+
+SMODS.Joker{
+	key = "annoying_fly",
+    config = { extra = { mult = 1 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = "rj_junk",
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "annoying_fly",
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if math.random(1, 111) == 1 then
+                return {
+                    mult = card.ability.extra.mult
+                }
+            else
+                return {
+                    message = localize('k_nope_ex'),
+                }
+            end
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.mult } }
+	end
+}
+
+SMODS.Joker{
+	key = "garbage_dealer",
+    config = { extra = { j_x_mult = 2 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = "rj_garbage",
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "garbage_dealer",
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local junk_count = 0
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i].config.center.rarity == "rj_junk" then
+                    junk_count = junk_count + 1
+                end
+            end
+            return {
+                message = "X"..card.ability.extra.j_x_mult * junk_count.." Mult",
+                colour = G.C.MULT,
+                x_mult = card.ability.extra.j_x_mult * junk_count,
+                remove_default_message = true
+            }
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.j_x_mult } }
 	end
 }

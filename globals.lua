@@ -30,7 +30,8 @@ G.C.RJ = {
     WHITE = HEX("FFFFFF"),
     TRANSPARENT = HEX("00000000"),
     GREEN = HEX("44C448"),
-    YELLOW = HEX("FFFD32")
+    YELLOW = HEX("FFFD32"),
+    GREY = HEX("7a7a7a")
 }
 
 local loc_colour_ref = loc_colour
@@ -46,5 +47,6 @@ function loc_colour(_c, _default)
     G.ARGS.LOC_COLOURS.rj_transparent = G.C.RJ.TRANSPARENT
     G.ARGS.LOC_COLOURS.rj_green = G.C.RJ.GREEN
     G.ARGS.LOC_COLOURS.rj_yellow = G.C.RJ.YELLOW
+    G.ARGS.LOC_COLOURS.rj_grey = G.C.RJ.GREY
     return loc_colour_ref(_c, _default)
 end

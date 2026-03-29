@@ -6,9 +6,26 @@ return {
                 text = {
                     "Start with a #1# and a #2#"
                 }
+			},
+            b_rj_j_test_2 = {
+				name = "Joker Testing Deck 2",
+                text = {
+                    "Start with a #1# and a #2#"
+                }
 			}
 		},
         Joker = {
+            j_rj_one = {
+                name = "One",
+                text = {
+                    {
+                        "If 1st played hand of round contains",
+                        "at least 1 scoring card with rank 4,",
+                        "destroy all cards in played hand",
+                        "and add a {C:dark_edition}Negative{} 1 of {C:clubs}Clubs{} to hand"
+                    }
+                }
+            },
             j_rj_two = {
                 name = "Two",
                 text = {
@@ -45,10 +62,43 @@ return {
                         "Maximum of #3# triggers per hand played"
                     }
                 }
+            },
+            j_rj_chipped_tooth = {
+                name = "Chipped Tooth",
+                text = {
+                    {
+                        "{C:chips}+#1#{} Chip"
+                    }
+                }
+            },
+            j_rj_annoying_fly = {
+                name = "Annoying Fly",
+                text = {
+                    {
+                        "{C:green}1 in 111{} chance to give {C:mult}+#1#{} Mult"
+                    }
+                }
+            },
+            j_rj_garbage_dealer = {
+                name = "Garbage Dealer",
+                text = {
+                    {
+                        "Gives {X:mult,C:white}X2{} Mult for each {C:rj_grey}Junk{} joker you currently have,",
+                        "starting at {X:mult,C:white}X0{}"
+                    }
+                }
             }
         }
     },
     misc = {
+        dictionary = {
+            k_rj_junk = "Junk",
+            k_rj_garbage = "Garbage"
+        },
+        labels = {
+            k_rj_junk = "Junk",
+            k_rj_garbage = "Garbage"
+        },
         poker_hands = {
         },
         poker_hand_descriptions = {
