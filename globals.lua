@@ -31,7 +31,8 @@ G.C.RJ = {
     TRANSPARENT = HEX("00000000"),
     GREEN = HEX("44C448"),
     YELLOW = HEX("FFFD32"),
-    GREY = HEX("7a7a7a")
+    GREY = HEX("7a7a7a"),
+    THREE = HEX("F64F4C")
 }
 
 local loc_colour_ref = loc_colour

@@ -12,6 +12,12 @@ return {
                 text = {
                     "Start with a #1# and a #2#"
                 }
+			},
+            b_rj_demoted = {
+				name = "Demoted Deck",
+                text = {
+                    "Start with a #1# and a #2#"
+                }
 			}
 		},
         Joker = {
@@ -33,6 +39,16 @@ return {
                         "^2^(1/2) Mult before other jokers score",
                         "if played hand contains a 2 of a Kind",
                         "with rank divisible by 2"
+                    }
+                }
+            },
+            j_rj_three = {
+                name = "Three",
+                text = {
+                    {
+                        "Triggers XMult for each card played",
+                        "X1.03 to XMult for each card destroyed",
+                        "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                     }
                 }
             },

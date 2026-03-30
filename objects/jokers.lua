@@ -16,6 +16,13 @@ SMODS.Atlas({
 })
 
 SMODS.Atlas({
+    key = "three",
+    path = "j_placeholder.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Atlas({
     key = "four",
     path = "j_four.png",
     px = 71,
@@ -149,6 +156,46 @@ SMODS.Joker{
     end,
     loc_vars = function(self, info_queue, card)
 		return { vars = {} }
+	end
+}
+
+SMODS.Joker{
+	key = "three",
+    config = { extra = { c_x_mult = 1, x_x_mult = 1.03 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = 1,
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "three",
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            return {
+                message = "X"..(math.floor(card.ability.extra.c_x_mult * 100 + 0.5) / 100).." Mult",
+                colour = G.C.RJ.THREE,
+                x_mult = card.ability.extra.c_x_mult,
+                remove_default_message = true
+            }
+        end
+        if context.remove_playing_cards and not context.blueprint then
+            card.ability.extra.c_x_mult = card.ability.extra.c_x_mult * card.ability.extra.x_x_mult ^ #context.removed
+            return {
+                message = localize {
+                    type = "variable",
+                    key = "a_xmult",
+                    vars = {
+                        card.ability.extra.c_x_mult
+                    }
+                }
+            }
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.c_x_mult, card.ability.extra.x_x_mult } }
 	end
 }
 
