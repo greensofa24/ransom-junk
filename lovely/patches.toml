@@ -9,3 +9,46 @@ pattern = '''percent = percent + percent_delta'''
 position = "after"
 payload = '''SMODS.calculate_context({pre_joker_main = true, scoring_hand = scoring_hand})'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.facing == 'front' then"
+position = 'after'
+match_indent = true
+payload = '''
+if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.edition and self.edition.rj_cool then
+    return
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "function CardArea:remove_from_highlighted(card, force)"
+position = 'after'
+match_indent = true
+payload = '''
+if card.edition and card.edition.rj_cool then
+    card.ability.forced_selection = false
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+G.hand.highlighted[i].ability.discarded = true
+draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+'''
+position = 'at'
+match_indent = true
+payload = '''
+local card = G.hand.highlighted[i]
+if hook and card.edition and card.edition.rj_cool then
+    card:highlight(false)
+else
+    card.ability.discarded = true
+    draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, card)
+end
+'''

@@ -3,7 +3,7 @@ discovered_by_default = true
 
 SMODS.Atlas({
     key = "one",
-    path = "j_placeholder.png",
+    path = "j_one.png",
     px = 71,
     py = 95
 })
@@ -17,7 +17,7 @@ SMODS.Atlas({
 
 SMODS.Atlas({
     key = "three",
-    path = "j_placeholder.png",
+    path = "j_three.png",
     px = 71,
     py = 95
 })
@@ -32,6 +32,27 @@ SMODS.Atlas({
 SMODS.Atlas({
     key = "six",
     path = "j_six.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Atlas({
+    key = "eight",
+    path = "j_eight.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Atlas({
+    key = "nine",
+    path = "j_nine.png",
+    px = 71,
+    py = 95
+})
+
+SMODS.Atlas({
+    key = "ten",
+    path = "j_placeholder.png",
     px = 71,
     py = 95
 })
@@ -68,7 +89,7 @@ SMODS.Joker{
 	key = "one",
     config = { extra = {} },
     pos = { x = 0, y = 0 },
-    soul_pos = nil,
+    soul_pos = { x = 1, y = 0 },
     rarity = 1,
     cost = 4,
     blueprint_compat = true,
@@ -79,9 +100,17 @@ SMODS.Joker{
     atlas = "one",
     calculate = function(self, card, context)
         if context.pre_joker_main then
+            local four_count = 0
             for _, played_card in ipairs(context.scoring_hand) do
                 if played_card:get_id() == 4 then
+                    four_count = four_count + 1
+                end
+            end
+            if four_count > 0 then
+                if not context.blueprint then
                     SMODS.destroy_cards(G.play.cards)
+                end
+                for i = 1, four_count do
                     local added_card = SMODS.create_card { set = "Base", rank = "rj_1", suit = "Clubs", edition = "e_negative", area = G.hand }
                     table.insert(G.playing_cards, added_card)
                     G.hand:emplace(added_card)
@@ -102,9 +131,8 @@ SMODS.Joker{
                             return true
                         end
                     }))
-
-                    return nil, true
                 end
+                return nil, true
             end
         end
     end,
@@ -163,7 +191,7 @@ SMODS.Joker{
 	key = "three",
     config = { extra = { c_x_mult = 1, x_x_mult = 1.03 } },
     pos = { x = 0, y = 0 },
-    soul_pos = nil,
+    soul_pos = { x = 1, y = 0 },
     rarity = 1,
     cost = 4,
     blueprint_compat = true,
@@ -279,6 +307,140 @@ SMODS.Joker{
 	end
 }
 
+SMODS.Joker{
+	key = "eight",
+    config = { extra = { chance = (1/8)^(1/8), uses = 0 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = 1,
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "eight",
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.individual and not context.repetition then
+            card.ability.extra.uses = card.ability.extra.uses + 1
+
+            return {
+                message = "+1 Use",
+                colour = G.C.RJ.GREY
+            }
+        end
+    end,
+    can_use = function(self, card)
+        return #G.hand.highlighted == 1 and card.ability.extra.uses > 0
+    end,
+    use = function(self, card, context)
+        if #G.hand.highlighted == 1 then
+            if math.random() < card.ability.extra.chance then
+                local created_cards = {}
+
+                for i = 1, 3 do
+                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                    local card_copied = copy_card(G.hand.highlighted[1], nil, nil, G.playing_card)
+
+                    card_copied:add_sticker("rj_temporary", true)
+                    card_copied:add_to_deck()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    table.insert(G.playing_cards, card_copied)
+                    G.hand:emplace(card_copied)
+                    card_copied.states.visible = nil
+
+                    table.insert(created_cards, card_copied)
+
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            card_copied:start_materialize()
+                            return true
+                        end
+                    }))
+                end
+
+                return {
+                    message = localize('k_copied_ex'),
+                    colour = G.C.RJ.GREY,
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                SMODS.calculate_context({ playing_card_added = true, cards = created_cards })
+                                return true
+                            end
+                        }))
+                    end
+                }
+            else
+                return {
+                    message = "Go Fish",
+                    colour = G.C.RJ.GREY
+                }
+            end
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = {} }
+	end
+}
+
+SMODS.Joker{
+	key = "nine",
+    config = { extra = { edition = "e_rj_cool", scored_tally = 0 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = 1,
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "nine",
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            card.ability.extra.scored_tally = card.ability.extra.scored_tally + 1
+            if card.ability.extra.scored_tally == 9 then
+                card.ability.extra.scored_tally = 0
+                local other_card = context.other_card
+                SMODS.calculate_effect({
+                    message = "Coolness Up!",
+                    colour = G.C.RJ.NINE
+                }, other_card)
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        other_card:set_edition(card.ability.extra.edition)
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.edition } }
+	end
+}
+--[[
+SMODS.Joker{
+	key = "ten",
+    config = { extra = { chips = 1 } },
+    pos = { x = 0, y = 0 },
+    soul_pos = nil,
+    rarity = 1,
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    unlocked = true,
+    discovered = discovered_by_default,
+    effect = nil,
+    atlas = "ten",
+    calculate = function(self, card, context)
+    end,
+    loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.chips } }
+	end
+}
+]]
 SMODS.Joker{
 	key = "x",
     config = { extra = { min_x_mult = 1.1, max_x_mult = 1.7, max_triggers = 77, triggers = 0 } },

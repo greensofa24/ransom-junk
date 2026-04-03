@@ -22,6 +22,12 @@ SMODS.current_mod.optional_features = {
     }]]--
 }
 
+function SMODS.current_mod.set_debuff(card)
+    if card.edition and card.edition.rj_cool then
+        return 'prevent_debuff'
+    end
+end
+
 G.C.RJ = {
     RED = HEX("FF0000"),
     BLACK = HEX("000000"),
@@ -31,8 +37,9 @@ G.C.RJ = {
     TRANSPARENT = HEX("00000000"),
     GREEN = HEX("44C448"),
     YELLOW = HEX("FFFD32"),
-    GREY = HEX("7a7a7a"),
-    THREE = HEX("F64F4C")
+    GREY = HEX("7c7c7c"),
+    THREE = HEX("F64F4C"),
+    NINE = HEX("DDE2EC")
 }
 
 local loc_colour_ref = loc_colour
