@@ -13,6 +13,12 @@ return {
                     "Start with a #1# and a #2#"
                 }
 			},
+            b_rj_j_test_3 = {
+				name = "Joker Testing Deck 3",
+                text = {
+                    "Start with a #1# and a #2#"
+                }
+			},
             b_rj_demoted = {
 				name = "Demoted Deck",
                 text = {
@@ -24,8 +30,34 @@ return {
                 text = {
                     "Start with a #1# and a #2#"
                 }
-			}
+			},
+            b_rj_stickered = {
+				name = "Stickered Deck",
+                text = {
+                    "Each suit has its",
+                    "respectively colored",
+                    "sticker"
+                }
+			},
+            b_rj_joker = {
+                name = "Joker Deck",
+                text = {
+                    "Start with a #1# and a #2#"
+                }
+            }
 		},
+        Edition = {
+            e_rj_cool = {
+                name = "Cool",
+                text = {
+                    "Cannot be flipped, debuffed,",
+                    "force-discarded, force-selected,",
+                    "force-deselected, or cursed and",
+                    "Decreases blind requirement",
+                    "by 1/9 when scored"
+                }
+            }
+        },
         Joker = {
             j_rj_one = {
                 name = "One",
@@ -43,7 +75,7 @@ return {
                 name = "Two",
                 text = {
                     {
-                        "{X:dark_edition,C:mult}^2^(1/2){} Mult before other jokers score"
+                        "{X:black,C:mult}^2^(1/2){} Mult before other jokers score"
                     }
                 }
             },
@@ -127,9 +159,84 @@ return {
                         "starting at {X:mult,C:white}X0{}"
                     }
                 }
+            },
+            j_rj_oops_all_1s = {
+                name = "Oops! All 1s",
+                text = {
+                    "Halves all {C:attention}listed",
+                    "{C:green,E:1,S:1.1}probabilities",
+                    "{C:inactive}(ex: {C:green}2 in 3{C:inactive} -> {C:green}1 in 3{C:inactive})",
+                }
+            },
+            j_rj_joker_joker = {
+                name = "Joker Joker",
+                text = {
+                    "{X:mult,C:white}X#1#{} Mult"
+                }
+            },
+            j_rj_joker_joker_joker = {
+                name = "Joker Joker Joker",
+                text = {
+                    "{X:black,C:mult}^#1#{} Mult"
+                }
+            },
+            ["j_rj_joker^4"] = {
+                name = "Joker^4",
+                text = {
+                    "{X:mult,C:black}^^#1#{} Mult"
+                }
+            },
+            ["j_rj_joker^5"] = {
+                name = "Joker^5",
+                text = {
+                    "{X:dark_edition,C:mult}^^^#1#{} Mult"
+                }
+            },
+            ["j_rj_joker^x"] = {
+                name = "Joker^x",
+                text = {
+                    "{X:mult,C:dark_edition}#1# #2#{} Mult",
+                    "Hyperoperator is increased by 1 each trigger"
+                }
+            },
+            ["j_rj_joker^x^x"] = {
+                name = "Joker^x^x",
+                text = {
+                    "{X:mult,C:dark_edition}#1# #2#{} Mult",
+                    "Hyperoperator is equal to 2n-1 choose n",
+                    "n is increased by 1 each trigger",
+                    "{C:inactive}(Currently n = #3#)"
+                }
+            },
+            j_rj_repeat = {
+                name = "Repeat",
+                text = {
+                    "Triggers every joker",
+                    "to the left of itself that",
+                    "scores in the main scoring phase"
+                }
+            },
+            j_rj_lineage = {
+                name = "The Lineage",
+                text = {
+                    "{X:mult,C:white}X#1#{} Mult if played",
+                    "hand contains",
+                    "a {C:attention}#2#",
+                },
+                unlock = {
+                    "Win a run",
+                    "having played",
+                    "{E:1,C:attention}#1#",
+                    "exactly 5 times"
+                }
             }
         },
         Other = {
+            card_mult = {
+                text = {
+                    "{C:mult}+#1#{} mult"
+                }
+            },
             rj_double_red_seal = {
                 name = "Red Sealed Red Seal",
                 text = {
@@ -137,6 +244,33 @@ return {
                     "card {C:attention}1{} time, then",
                     "retrigger that",
                     "retrigger {C:attention}1{} time"
+                }
+            },
+            rj_temporary = {
+                name = "Temporary",
+                text = {
+                    "Destroyed at the",
+                    "end of the round"
+                }
+            },
+            rj_locked = {
+                name = "Locked",
+                text = {
+                    "Cannot be discarded"
+                }
+            },
+            rj_hazardous = {
+                name = "Hazardous",
+                text = {
+                    "Takes up 1 extra slot"
+                }
+            }
+        },
+        Tag = {
+            tag_rj_sleeved_juggle = {
+                name = "Sleeved Juggle Tag",
+                text = {
+                    "description"
                 }
             }
         }
@@ -150,6 +284,10 @@ return {
             k_rj_junk = "Junk",
             k_rj_garbage = "Garbage",
             rj_double_red_seal = "Red Sealed Red Seal",
+            rj_cool = "Cool",
+            rj_temporary = "Temporary",
+            rj_locked = "Locked",
+            rj_hazardous = "Hazardous"
         },
         poker_hands = {
         },
@@ -157,7 +295,12 @@ return {
         },
         ranks = {
             rj_0 = "0",
-            rj_1 = "1"
+            rj_1 = "1",
+            rj_B = "B",
+            rj_C = "C",
+            rj_D = "D",
+            rj_E = "E",
+            rj_F = "F"
         }
     }
 }

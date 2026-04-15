@@ -36,19 +36,104 @@ end
 
 [[patches]]
 [patches.pattern]
-target = 'functions/state_events.lua'
+target = 'game.lua'
+pattern = "if args.seed then self.GAME.seeded = true end"
+position = 'before'
+match_indent = true
+payload = '''
+RansomJunk.chips_kept = 0
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = 'nominal_chips = self.base.nominal ~= 0 and self.base.nominal or nil,'
+position = "at"
+payload = 'nominal_chips = self.base.nominal ~= 0 and self.base.nominal or nil,'
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "bonus_x_chips = self.ability.perma_x_chips ~= 0 and (self.ability.perma_x_chips + 1) or nil,"
+position = 'before'
+match_indent = true
+payload = '''
+chips_text = self.base.chips_text or nil,
+mult = self.base.mult ~= 0 and self.base.mult or nil,
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
 pattern = '''
-G.hand.highlighted[i].ability.discarded = true
-draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+if specific_vars.nominal_chips then
+    localize{type = 'other', key = 'card_chips'..(specific_vars.nominal_chips < 0 and '_minus' or ''), nodes = desc_nodes, vars = {specific_vars.nominal_chips}}
+end
 '''
 position = 'at'
 match_indent = true
 payload = '''
-local card = G.hand.highlighted[i]
-if hook and card.edition and card.edition.rj_cool then
-    card:highlight(false)
-else
-    card.ability.discarded = true
-    draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, card)
+if specific_vars.chips_text then
+    localize{type = 'other', key = 'card_chips', nodes = desc_nodes, vars = {specific_vars.chips_text}}
+elseif specific_vars.nominal_chips then
+    localize{type = 'other', key = 'card_chips'..(specific_vars.nominal_chips < 0 and '_minus' or ''), nodes = desc_nodes, vars = {specific_vars.nominal_chips}}
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "elseif _c.set == 'Enhanced' then "
+position = 'before'
+match_indent = true
+payload = '''
+if specific_vars.mult then
+    localize{type = 'other', key = 'card_mult', nodes = desc_nodes, vars = {specific_vars.mult}}
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "self.base.id = rank.id"
+position = 'after'
+match_indent = true
+payload = '''
+self.base.mult = rank.mult or 0
+self.base.chips_text = rank.chips_text
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+local chips = card:get_chip_bonus()
+if chips ~= 0 then
+    ret.playing_card.chips = chips
+end
+'''
+position = 'at'
+match_indent = true
+payload = '''
+ret.playing_card2 = {}
+local chips = card:get_chip_bonus()
+if chips ~= 0 then
+    ret.playing_card2.message = "+"..(card.base.chips_text or chips)
+    ret.playing_card2.colour = G.C.CHIPS
+    ret.playing_card2.chips = chips
+    ret.playing_card2.remove_default_message = true
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "return ret, post_trig"
+position = 'before'
+match_indent = true
+payload = '''
+if ret.playing_card2 then
+    SMODS.calculate_effect(ret.playing_card2, card)
 end
 '''

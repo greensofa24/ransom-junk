@@ -6,14 +6,16 @@ SMODS.Edition({
     pos = { x = 0, y = 0 },
     shader = "cool",
     in_shop = true,
-    weight = 800,
-    extra_cost = 6,
-    apply_to_float = true,
+    weight = 8,
+    extra_cost = 4,
+    sound = { sound = "foil1", per = 1.2, vol = 0.4 },
+    get_weight = function(self)
+        return G.GAME.edition_rate * self.weight
+    end,
     calculate = function(self, card, context)
-        if context.joker_main and context.cardarea == G.jokers then
-            return {
-                chips = self.config.chips
-            }
+        if context.pre_joker or (context.main_scoring and context.cardarea == G.play) then
+            G.GAME.blind.chips = math.floor(G.GAME.blind.chips * 8/9)
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
         end
     end,
     loc_vars = function(self, info_queue, edition)
